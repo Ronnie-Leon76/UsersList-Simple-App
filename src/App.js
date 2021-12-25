@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import AddUser from "./Components/Users/AddUser";
 import styled from "styled-components";
-import UsersList from './Components/Users/UsersList'
+import UserList from "./Components/Users/UserList";
+
 const Section = styled.section`
   width: 30rem;
   max-width: 90%;
@@ -15,25 +16,26 @@ const UsersListSection = styled.section`
   max-width: 90%;
   margin: 3rem auto;
 `;
-let users = (
-  <p style={{ textAlign: "center" }}>No users found. Maybe add one? </p>
-);
-const [usersList, setUsersList] = useState([
-  { name: "ELon Musk", age: '49', id: 'g1' },
-  { name: "Jeff Bezos", age: '50', id: 'g2' },
-]);
-if(usersList.length > 0){
-  users = (<UsersList items={usersList} />)
-}
 
 function App() {
+  const [usersList, setUsersList] = useState([]);
+
+  const addUserHandler = (uName, uAge) => {
+    setUsersList((prevUsersList) => {
+      return [
+        ...prevUsersList,
+        { name: uName, age: uAge, id: Math.random().toString() },
+      ];
+    });
+  };
+
   return (
     <div>
       <Section>
-        <AddUser />
+        <AddUser onAddUser={addUserHandler} />
       </Section>
       <UsersListSection>
-        {users}
+        <UserList users={usersList} />
       </UsersListSection>
     </div>
   );
