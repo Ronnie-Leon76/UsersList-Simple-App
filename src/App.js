@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import AddUser from "./Components/Users/AddUser";
 import styled from "styled-components";
 import UserList from "./Components/Users/UserList";
+import Wrapper from './Components/Helpers/Wrapper'
 
 const Section = styled.section`
   width: 30rem;
@@ -30,14 +31,14 @@ function App() {
   };
 
   return (
-    <div>
+    <Wrapper>
       <Section>
         <AddUser onAddUser={addUserHandler} />
       </Section>
       <UsersListSection>
         <UserList users={usersList} />
       </UsersListSection>
-    </div>
+    </Wrapper>
   );
 }
 

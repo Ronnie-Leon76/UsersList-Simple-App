@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import styled from "styled-components";
 import Button from "../UI/Button";
 import ErrorModal from "../UI/ErrorModal";
@@ -39,9 +39,14 @@ function AddUser(props) {
   const [enteredName, setEnteredName] = useState("");
   const [enteredAge, setEnteredAge] = useState("");
   const [error, setError] = useState("");
+  const nameInputRef = useRef();
+  const ageInputRef = useRef();
 
   const formSubmitHandler = (event) => {
     event.preventDefault();
+    const enteredUserName = nameInputRef.current.value
+    const enteredUserAge = ageInputRef.current.value
+    console.log(enteredUserName, enteredUserAge);
     if (enteredName.trim().length === 0 || enteredAge.trim().length === 0) {
       setError({
         title: "Invalid input",
@@ -65,12 +70,14 @@ function AddUser(props) {
   };
   return (
     <section>
-        {error && (<ErrorModal
-        title={error.title}
-        message={error.message}
-        onConfirm={errorHandler}
-      />) }
-      
+      {error && (
+        <ErrorModal
+          title={error.title}
+          message={error.message}
+          onConfirm={errorHandler}
+        />
+      )}
+
       <form onSubmit={formSubmitHandler}>
         <FormControl>
           <label>Username</label>
@@ -78,12 +85,14 @@ function AddUser(props) {
             type="text"
             value={enteredName}
             onChange={(e) => setEnteredName(e.target.value)}
+            ref={nameInputRef}
           />
           <label>Age</label>
           <input
             type="number"
             value={enteredAge}
             onChange={(e) => setEnteredAge(e.target.value)}
+            ref={ageInputRef}
           />
         </FormControl>
         <Button type="submit">Add User</Button>

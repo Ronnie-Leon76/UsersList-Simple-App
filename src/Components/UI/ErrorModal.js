@@ -1,8 +1,9 @@
 import React from "react";
+import ReactDOM from "react-dom";
 import Card from "./Card";
 import Button from "./Button";
 import styled from "styled-components";
-import  './ErrorModal.css'
+import "./ErrorModal.css";
 
 const Backdrop = styled.div`
   position: fixed;
@@ -14,21 +15,41 @@ const Backdrop = styled.div`
   background: rgba(0, 0, 0, 0.75);
 `;
 
+const BackDrop = (props) => {
+  return <Backdrop onClick={props.onConfirm}></Backdrop>;
+};
+const CardModal = (props) => {
+  return (
+    <Card className="modal">
+      <header className="header">
+        <h2>{props.title}</h2>
+      </header>
+      <div className="content">
+        <p>{props.message}</p>
+      </div>
+      <footer className="actions">
+        <Button onClick={props.onConfirm}>Okay</Button>
+      </footer>
+    </Card>
+  );
+};
+
 function ErrorModal(props) {
-  return <div>
-      <Backdrop onClick={props.onConfirm}>
-          <Card className="modal">
-            <header className="header">
-                <h2>{props.title}</h2>
-            </header>
-            <div className="content">
-                <p>{props.message}</p>
-            </div>
-            <footer className="actions">
-                <Button onClick={props.onConfirm}>Okay</Button>
-            </footer>
-          </Card>
-      </Backdrop>
-  </div>;
+  return (
+    <React.Fragment>
+      {ReactDOM.createPortal(
+        <BackDrop onConfirm={props.onConfirm} />,
+        document.getElementById("backdrop-root")
+      )}
+      {ReactDOM.createPortal(
+        <CardModal
+          title={props.title}
+          message={props.message}
+          onConfirm={props.onConfirm}
+        />,
+        document.getElementById("overlay-root")
+      )}
+    </React.Fragment>
+  );
 }
 export default ErrorModal;
